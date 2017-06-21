@@ -3044,7 +3044,7 @@ class MQTT(object):
             pretty_metadata = PrettyMetadata(kwargs['metadata'])
             self.data['plex_url'] = pretty_metadata.get_plex_url()
             self.data['metadata'] = {
-                               'poster_url': pretty_metadata.get_poster_url().replace('http://', 'https://'),
+                               'poster_url': pretty_metadata.get_poster_url(),
                                'link': pretty_metadata.get_poster_link(),
                                'caption': pretty_metadata.get_caption(),
                                'description': pretty_metadata.get_subtitle(),
