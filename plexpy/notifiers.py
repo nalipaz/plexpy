@@ -3042,14 +3042,13 @@ class MQTT(object):
 
         if 'metadata' in kwargs:
             pretty_metadata = PrettyMetadata(kwargs['metadata'])
-            self.data.append({'plex_url': pretty_metadata.get_plex_url(),
-                              'poster': {
+            self.data['plex_url'] = pretty_metadata.get_plex_url()
+            self.data['poster'] = {
                                'url': pretty_metadata.get_poster_url(),
                                'link': pretty_metadata.get_poster_link(),
                                'caption': pretty_metadata.get_caption(),
                                'description': pretty_metadata.get_subtitle(),
                               }
-                             })
 
         self.mqtt.connect(self.broker, port=self.port, keepalive=self.keep_alive, bind_address=self.bind_address)
         self.mqtt.loop_start()
