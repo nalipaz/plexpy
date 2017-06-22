@@ -3041,6 +3041,7 @@ class MQTT(object):
                     }
 
         if 'metadata' in kwargs:
+            self.data['raw_metadata'] = kwargs['metadata']
             pretty_metadata = PrettyMetadata(kwargs['metadata'])
             self.data['plex_url'] = pretty_metadata.get_plex_url()
             self.data['metadata'] = {
