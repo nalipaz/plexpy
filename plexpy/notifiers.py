@@ -3039,6 +3039,7 @@ class MQTT(object):
                      'body': message.encode("utf-8"),
                      'topic': self.topic.encode("utf-8")
                     }
+        self.data['kwargs'] = kwargs;
 
         if 'metadata' in kwargs:
             self.data['raw_metadata'] = kwargs['metadata']
