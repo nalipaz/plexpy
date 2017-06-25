@@ -641,7 +641,7 @@ def send_notification(agent_id, subject, body, notify_action, **kwargs):
             return hipchat.notify(message=body, subject=subject, **kwargs)
         elif agent_id == 20:
             mqtt = MQTT()
-            return mqtt.notify(message=body, subject=subject, **kwargs)
+            return mqtt.notify(message=body, subject=subject, notify_action=notify_action, metadata=kwargs['metadata'])
         else:
             logger.debug(u"PlexPy Notifiers :: Unknown agent id received.")
     else:
@@ -3031,26 +3031,22 @@ class MQTT(object):
     def conf(self, options):
         return cherrypy.config['config'].get('MQTT', options)
 
-    def notify(self, message, subject, **kwargs):
+    def notify(self, message, subject, notify_action, metadata):
         if not message or not subject:
             return
 
-        self.data = {'title': subject.encode("utf-8"),
+        pretty_metadata = PrettyMetadata(metadata)
+        self.data = {'title': pretty_metadata.get_title(),
                      'body': message.encode("utf-8"),
-                     'topic': self.topic.encode("utf-8")
+                     'topic': self.topic.encode("utf-8"),
+                     'event_type': notify_action,
+                     'source': 'plexpy',
+                     'metadata': metadata
                     }
-        self.data['kwargs'] = kwargs;
-
-        if 'metadata' in kwargs:
-            self.data['raw_metadata'] = kwargs['metadata']
-            pretty_metadata = PrettyMetadata(kwargs['metadata'])
-            self.data['plex_url'] = pretty_metadata.get_plex_url()
-            self.data['metadata'] = {
-                               'poster_url': pretty_metadata.get_poster_url(),
-                               'link': pretty_metadata.get_poster_link(),
-                               'caption': pretty_metadata.get_caption(),
-                               'description': pretty_metadata.get_subtitle(),
-                              }
+        self.data['metadata']['poster_url'] = pretty_metadata.get_poster_url()
+        self.data['metadata']['link'] = pretty_metadata.get_poster_link()
+        self.data['metadata']['caption'] = pretty_metadata.get_caption()
+        self.data['metadata']['description'] = pretty_metadata.get_subtitle()
 
         self.mqtt.connect(self.broker, port=self.port, keepalive=self.keep_alive, bind_address=self.bind_address)
         self.mqtt.loop_start()
