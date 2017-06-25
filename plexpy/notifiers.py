@@ -3049,7 +3049,7 @@ class MQTT(object):
         self.data['metadata']['caption'] = pretty_metadata.get_caption()
         self.data['metadata']['description'] = pretty_metadata.get_subtitle()
         # com.plexapp.agents.thetvdb://268592/1/11?lang=en
-        self.data['tag'] =
+
 
         self.mqtt.connect(self.broker, port=self.port, keepalive=self.keep_alive, bind_address=self.bind_address)
         self.mqtt.loop_start()
