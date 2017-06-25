@@ -641,7 +641,7 @@ def send_notification(agent_id, subject, body, notify_action, **kwargs):
             return hipchat.notify(message=body, subject=subject, **kwargs)
         elif agent_id == 20:
             mqtt = MQTT()
-            return mqtt.notify(message=body, subject=subject, notify_action=notify_action, metadata=kwargs['metadata'], **kwargs)
+            return mqtt.notify(message=body, subject=subject, notify_action=notify_action, metadata=kwargs['metadata'])
         else:
             logger.debug(u"PlexPy Notifiers :: Unknown agent id received.")
     else:
@@ -3031,7 +3031,7 @@ class MQTT(object):
     def conf(self, options):
         return cherrypy.config['config'].get('MQTT', options)
 
-    def notify(self, message, subject, notify_action, metadata, **kwargs):
+    def notify(self, message, subject, notify_action, metadata):
         if not message or not subject:
             return
 
@@ -3041,15 +3041,14 @@ class MQTT(object):
                      'topic': self.topic.encode("utf-8"),
                      'event_type': notify_action,
                      'source': 'plexpy',
-                     'metadata': metadata,
-                     'kwargs': kwargs
+                     'metadata': metadata
                     }
         self.data['metadata']['poster_url'] = pretty_metadata.get_poster_url()
         self.data['metadata']['link'] = pretty_metadata.get_poster_link()
         self.data['metadata']['caption'] = pretty_metadata.get_caption()
         self.data['metadata']['description'] = pretty_metadata.get_subtitle()
         # com.plexapp.agents.thetvdb://268592/1/11?lang=en
-
+        # self.data['tag'] =
 
         self.mqtt.connect(self.broker, port=self.port, keepalive=self.keep_alive, bind_address=self.bind_address)
         self.mqtt.loop_start()
