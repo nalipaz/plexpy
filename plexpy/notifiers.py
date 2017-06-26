@@ -3051,7 +3051,7 @@ class MQTT(object):
         if metadata['media_type'] == 'movie':
             self.data['tag'] = metadata['imdb_id']
         elif metadata['media_type'] == 'show' or metadata['media_type'] == 'episode':
-            self.data['tag'] = metadata['thetvdb_id']
+            self.data['tag'] = "%s.%s.%s" % (metadata['thetvdb_id'], 0, 0) # @todo: use season and episode for this tag formatter
         elif metadata['media_type'] == 'artist' or metadata['media_type'] == 'track':
             self.data['tag'] = metadata['lastfm_id']
         else:
