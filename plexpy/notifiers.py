@@ -3048,7 +3048,14 @@ class MQTT(object):
         self.data['metadata']['caption'] = pretty_metadata.get_caption()
         self.data['metadata']['description'] = pretty_metadata.get_subtitle()
         # com.plexapp.agents.thetvdb://268592/1/11?lang=en
-        # self.data['tag'] =
+        if metadata['media_type'] == 'movie':
+            self.data['tag'] = metadata['imdb_id']
+        elif metadata['media_type'] == 'show' or metadata['media_type'] == 'episode':
+            self.data['tag'] = metadata['thetvdb_id']
+        elif metadata['media_type'] == 'artist' or metadata['media_type'] == 'track':
+            self.data['tag'] = metadata['lastfm_id']
+        else:
+            self.data['tag'] = self.data.title
 
         self.mqtt.connect(self.broker, port=self.port, keepalive=self.keep_alive, bind_address=self.bind_address)
         self.mqtt.loop_start()
