@@ -3041,7 +3041,8 @@ class MQTT(object):
                      'topic': self.topic.encode("utf-8"),
                      'event_type': notify_action,
                      'source': 'plexpy',
-                     'metadata': metadata
+                     'metadata': metadata,
+                     'episode_num': metadata['media_index'].zfill(2),
                     }
         self.data['metadata']['poster_url'] = pretty_metadata.get_poster_url()
         self.data['metadata']['link'] = pretty_metadata.get_poster_link()
