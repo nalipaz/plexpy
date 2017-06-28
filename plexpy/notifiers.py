@@ -3042,7 +3042,6 @@ class MQTT(object):
                      'event_type': notify_action,
                      'source': 'plexpy',
                      'metadata': metadata,
-                     'episode_num': metadata['media_index'].zfill(2),
                     }
         self.data['metadata']['poster_url'] = pretty_metadata.get_poster_url()
         self.data['metadata']['link'] = pretty_metadata.get_poster_link()
@@ -3052,9 +3051,15 @@ class MQTT(object):
         if metadata['media_type'] == 'movie':
             self.data['tag'] = metadata['imdb_id']
         elif metadata['media_type'] == 'show' or metadata['media_type'] == 'episode':
-            self.data['tag'] = "%s.%s.%s" % (metadata['thetvdb_id'], 0, 0) # @todo: use season and episode for this tag formatter
+            self.data['season_num'] = metadata['parent_media_index'].zfill(1)
+            self.data['season_num00'] = metadata['parent_media_index'].zfill(2)
+            self.data['episode_num'] = metadata['media_index'].zfill(1)
+            self.data['episode_num00'] = metadata['media_index'].zfill(2)
+            self.data['tag'] = "%s.%s.%s" % (metadata['thetvdb_id'], self.data['season_num00'], self.data['episode_num00']) # @todo: use season and episode for this tag formatter
         elif metadata['media_type'] == 'artist' or metadata['media_type'] == 'track':
             self.data['tag'] = metadata['lastfm_id']
+            self.data['track_num'] = metadata['media_index'].zfill(1)
+            self.data['track_num00'] = metadata['media_index'].zfill(2)
         else:
             self.data['tag'] = self.data.title
 
