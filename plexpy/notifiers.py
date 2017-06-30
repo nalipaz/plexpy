@@ -3035,6 +3035,7 @@ class MQTT(object):
         if not message or not subject:
             return
 
+        # @todo look into possibly obtaining session for use here. open a new issue/PR for this.
         pretty_metadata = PrettyMetadata(metadata)
         self.data = {'title': pretty_metadata.get_title(),
                      'body': message.encode("utf-8"),
@@ -3042,10 +3043,6 @@ class MQTT(object):
                      'event_type': notify_action,
                      'source': 'plexpy',
                      'metadata': metadata,
-                     'user': {
-                       'friendly_name': metadata['user'],
-                       'username': metadata['user'],
-                     }
                     }
         self.data['metadata']['poster_url'] = pretty_metadata.get_poster_url()
         self.data['metadata']['link'] = pretty_metadata.get_poster_link()
