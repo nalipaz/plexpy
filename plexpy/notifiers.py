@@ -3064,7 +3064,8 @@ class MQTT(object):
             self.data['track_num00'] = metadata['media_index'].zfill(2)
         else:
             self.data['tag'] = self.data.title
-
+        self.data['tag'] = "%s.%s.%s" % (session.machine_id, session.user_id, session.data['tag'])
+        
         self.mqtt.connect(self.broker, port=self.port, keepalive=self.keep_alive, bind_address=self.bind_address)
         self.mqtt.loop_start()
 
