@@ -3043,8 +3043,7 @@ class MQTT(object):
                      'event_type': notify_action,
                      'source': 'plexpy',
                      'metadata': metadata,
-                     'kwargs': kwargs,
-                     'session': kwargs['session'] if 'session' in kwargs else 'session not set'
+                     'session': session
                     }
         self.data['metadata']['poster_url'] = pretty_metadata.get_poster_url()
         self.data['metadata']['link'] = pretty_metadata.get_poster_link()
