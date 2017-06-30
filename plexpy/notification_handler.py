@@ -128,7 +128,8 @@ def notify(stream_data=None, notify_action=None):
                                                 body=notify_strings[1],
                                                 script_args=notify_strings[2],
                                                 notify_action=notify_action,
-                                                metadata=metadata)
+                                                metadata=metadata,
+                                                session=stream_data)
 
                     # Set the notification state in the db
                     set_notify_state(session=stream_data,
