@@ -641,7 +641,7 @@ def send_notification(agent_id, subject, body, notify_action, **kwargs):
             return hipchat.notify(message=body, subject=subject, **kwargs)
         elif agent_id == 20:
             mqtt = MQTT()
-            return mqtt.notify(message=body, subject=subject, notify_action=notify_action, metadata=kwargs['metadata'], **kwargs)
+            return mqtt.notify(message=body, subject=subject, notify_action=notify_action, metadata=kwargs['metadata'], session=kwargs['session'])
         else:
             logger.debug(u"PlexPy Notifiers :: Unknown agent id received.")
     else:
@@ -3031,7 +3031,7 @@ class MQTT(object):
     def conf(self, options):
         return cherrypy.config['config'].get('MQTT', options)
 
-    def notify(self, message, subject, notify_action, metadata, **kwargs):
+    def notify(self, message, subject, notify_action, metadata, session):
         if not message or not subject:
             return
 
