@@ -3039,32 +3039,15 @@ class MQTT(object):
         pretty_metadata = PrettyMetadata(metadata)
         self.data = {'title': pretty_metadata.get_title(),
                      'body': message.encode("utf-8"),
-                     'topic': self.topic.encode("utf-8"),
+                     'topic': self.topic,
                      'event_type': notify_action,
                      'source': 'plexpy',
                      'metadata': metadata,
-                     'session': session
+                     'session': session,
+                     'poster_url': pretty_metadata.get_poster_url(),
+                     'link': pretty_metadata.get_poster_link(),
+                     'caption': pretty_metadata.get_caption()
                     }
-        self.data['metadata']['poster_url'] = pretty_metadata.get_poster_url()
-        self.data['metadata']['link'] = pretty_metadata.get_poster_link()
-        self.data['metadata']['caption'] = pretty_metadata.get_caption()
-        self.data['metadata']['description'] = pretty_metadata.get_subtitle()
-        # com.plexapp.agents.thetvdb://268592/1/11?lang=en
-        if metadata['media_type'] == 'movie':
-            self.data['tag'] = metadata['imdb_id']
-        elif metadata['media_type'] == 'show' or metadata['media_type'] == 'episode':
-            self.data['season_num'] = metadata['parent_media_index'].zfill(1)
-            self.data['season_num00'] = metadata['parent_media_index'].zfill(2)
-            self.data['episode_num'] = metadata['media_index'].zfill(1)
-            self.data['episode_num00'] = metadata['media_index'].zfill(2)
-            self.data['tag'] = "%s.%s.%s" % (metadata['thetvdb_id'], self.data['season_num00'], self.data['episode_num00'])
-        elif metadata['media_type'] == 'artist' or metadata['media_type'] == 'track':
-            self.data['tag'] = metadata['lastfm_id']
-            self.data['track_num'] = metadata['media_index'].zfill(1)
-            self.data['track_num00'] = metadata['media_index'].zfill(2)
-        else:
-            self.data['tag'] = self.data.title
-        # self.data['tag'] = "%s.%s.%s" % (session.machine_id, session.user_id, session.data['tag'])
 
         self.mqtt.connect(self.broker, port=self.port, keepalive=self.keep_alive, bind_address=self.bind_address)
         self.mqtt.loop_start()
